@@ -1,11 +1,8 @@
-# HILL CIPHER
-HILL CIPHER
-EX. NO: 3 AIM:
- 
-
-IMPLEMENTATION OF HILL CIPHER
- 
-## To write a C program to implement the hill cipher substitution techniques.
+## HILL CIPHER
+## EX. NO: 3
+## IMPLEMENTATION OF HILL CIPHER
+## AIM:
+ To write a C program to implement the hill cipher substitution techniques.
 
 ## DESCRIPTION:
 
@@ -29,7 +26,72 @@ STEP-4: Multiply the two matrices to obtain the cipher text of length three.
 STEP-5: Combine all these groups to get the complete cipher text.
 
 ## PROGRAM 
+```
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#define SIZE 3
 
+void multiplyMatrix(int key[SIZE][SIZE], int text[SIZE], int result[SIZE]) {
+    for (int i = 0; i < SIZE; i++) {
+        result[i] = 0;
+        for (int j = 0; j < SIZE; j++) {
+            result[i] += key[i][j] * text[j];
+        }
+        result[i] = result[i] % 26;
+    }
+}
+int main() {
+    char plainText[100];
+    char cipherText[100] = "";
+    int key[SIZE][SIZE];
+    int len;
+    printf("Enter the plain text: ");
+    fgets(plainText, sizeof(plainText), stdin);
+    plainText[strcspn(plainText, "\n")] = '\0';
+    for (int i = 0; plainText[i]; i++) {
+        if (isalpha(plainText[i])) {
+            plainText[i] = toupper(plainText[i]);
+        }
+    }
+    char temp[100];
+    int idx = 0;
+    for (int i = 0; plainText[i]; i++) {
+        if (isalpha(plainText[i])) {
+            temp[idx++] = plainText[i];
+        }
+    }
+    temp[idx] = '\0';
+    strcpy(plainText, temp);
+    len = strlen(plainText);
+    while (len % 3 != 0) {
+        plainText[len++] = 'X';
+    }
+    plainText[len] = '\0';
+    printf("Enter the 3x3 key matrix:\n");
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            scanf("%d", &key[i][j]);
+        }
+    }
+    for (int i = 0; i < len; i += 3) {
+        int textVec[SIZE];
+        int result[SIZE];
+        for (int j = 0; j < SIZE; j++) {
+            textVec[j] = plainText[i + j] - 'A';
+        }
+        multiplyMatrix(key, textVec, result);
+        for (int j = 0; j < SIZE; j++) {
+            char c = result[j] + 'A';
+            strncat(cipherText, &c, 1);
+        }
+    }
+    printf("Cipher Text: %s\n", cipherText);
+    return 0;
+}
+```
 ## OUTPUT
+<img width="1919" height="974" alt="image" src="https://github.com/user-attachments/assets/3cb36402-fb4a-4310-9fc6-ce7b7e0a695d" />
 
 ## RESULT
+The Hill-cipher is successfully implemented.
